@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drawing Request Form</title>
+</head>
+<body>
+    <h1>Welcome to the Drawing Request Page!</h1>
+    <p>Please select what you'd like me to draw for you:</p>
+
+    <form action="submit_request.php" method="POST">
+        <label for="drawing">Choose a drawing:</label>
+        <select id="drawing" name="drawing">
+            <option value="cat">Cat</option>
+            <option value="dog">Dog</option>
+            <option value="tree">Tree</option>
+            <option value="custom">Custom Request</option>
+        </select>
+        <br><br>
+
+        <label for="description">Description of what you want (optional):</label>
+        <input type="text" id="description" name="description">
+        <br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
