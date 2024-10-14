@@ -60,12 +60,9 @@
         <label for="email">Email Address:</label>
         <input type="email" id="email" required>
 
-        <label for="linkedin">LinkedIn Profile:</label>
-        <input type="url" id="linkedin">
-
         <h2>Personal Statement</h2>
-        <label for="statement">Brief Summary:</label>
-        <textarea id="statement" rows="3"></textarea>
+        <label for="statement">Brief Summary (Career goals and skills):</label>
+        <textarea id="statement" rows="3" required></textarea>
 
         <h2>Work Experience</h2>
         <label for="experience">Previous Jobs (list each with title, company, dates, and key responsibilities):</label>
@@ -77,7 +74,23 @@
 
         <h2>Skills</h2>
         <label for="skills">Relevant Skills:</label>
-        <textarea id="skills" rows="3"></textarea>
+        <textarea id="skills" rows="3" required></textarea>
+
+        <h2>Certifications</h2>
+        <label for="certifications">Professional Certifications:</label>
+        <textarea id="certifications" rows="2"></textarea>
+
+        <h2>Projects</h2>
+        <label for="projects">Significant Projects:</label>
+        <textarea id="projects" rows="3"></textarea>
+
+        <h2>Awards and Honors</h2>
+        <label for="awards">Recognitions:</label>
+        <textarea id="awards" rows="2"></textarea>
+
+        <h2>Hobbies and Interests</h2>
+        <label for="hobbies">Relevant Hobbies:</label>
+        <textarea id="hobbies" rows="2"></textarea>
 
         <button type="submit">Generate CV</button>
     </form>
@@ -94,18 +107,20 @@
             const name = document.getElementById('name').value;
             const phone = document.getElementById('phone').value;
             const email = document.getElementById('email').value;
-            const linkedin = document.getElementById('linkedin').value;
             const statement = document.getElementById('statement').value;
             const experience = document.getElementById('experience').value;
             const education = document.getElementById('education').value;
             const skills = document.getElementById('skills').value;
+            const certifications = document.getElementById('certifications').value;
+            const projects = document.getElementById('projects').value;
+            const awards = document.getElementById('awards').value;
+            const hobbies = document.getElementById('hobbies').value;
 
             const cvContent = `
                 <h3>Contact Information</h3>
                 <p><strong>Name:</strong> ${name}</p>
                 <p><strong>Phone:</strong> ${phone}</p>
                 <p><strong>Email:</strong> ${email}</p>
-                <p><strong>LinkedIn:</strong> <a href="${linkedin}" target="_blank">${linkedin}</a></p>
 
                 <h3>Personal Statement</h3>
                 <p>${statement}</p>
@@ -118,6 +133,18 @@
 
                 <h3>Skills</h3>
                 <p>${skills}</p>
+
+                <h3>Certifications</h3>
+                <p>${certifications}</p>
+
+                <h3>Projects</h3>
+                <p>${projects}</p>
+
+                <h3>Awards and Honors</h3>
+                <p>${awards}</p>
+
+                <h3>Hobbies and Interests</h3>
+                <p>${hobbies}</p>
             `;
 
             document.getElementById('cvContent').innerHTML = cvContent;
