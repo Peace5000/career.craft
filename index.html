@@ -3,24 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CV Creation Page</title>
+    <title>CareerCraft: Multi-Function Site</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
+            background-color: #f0f8ff;
             padding: 20px;
             text-align: center;
         }
-        form {
-            background-color: white;
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            margin: 0 auto;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
-        input, select, textarea {
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        nav a {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        nav a:hover {
+            background-color: #45a049;
+        }
+        canvas {
+            border: 1px solid black;
+            margin: 20px auto;
+            display: block;
+        }
+        input, textarea, select {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
@@ -38,56 +57,165 @@
     </style>
 </head>
 <body>
-    <h1>CV Creation Page</h1>
-    <form id="cvForm">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
+    <h1>Welcome to CareerCraft!</h1>
+    <nav>
+        <a href="#" onclick="showSection('cv')">Create CV</a>
+        <a href="#" onclick="showSection('vector')">Plot Vectors</a>
+        <a href="#" onclick="showSection('sticker')">Create Stickers</a>
+    </nav>
 
-        <label for="modules">Modules (comma-separated):</label>
-        <textarea id="modules" name="modules" rows="4" required></textarea>
+    <div class="container" id="cvSection">
+        <h2>Create Your Professional CV</h2>
+        <form id="cvForm">
+            <h3>Personal Information</h3>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
 
-        <label for="level">Education Level:</label>
-        <select id="level" name="level" required>
-            <option value="Undergraduate">Undergraduate</option>
-            <option value="Graduate">Graduate</option>
-            <option value="Postgraduate">Postgraduate</option>
-        </select>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
 
-        <input type="submit" value="Generate CV">
-    </form>
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" required>
+
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" required>
+
+            <h3>Work Experience</h3>
+            <label for="jobTitle">Job Title:</label>
+            <input type="text" id="jobTitle" name="jobTitle" required>
+
+            <label for="company">Company:</label>
+            <input type="text" id="company" name="company" required>
+
+            <label for="jobDesc">Job Description:</label>
+            <textarea id="jobDesc" name="jobDesc" rows="4" required></textarea>
+
+            <h3>Skills</h3>
+            <label for="skills">Skills (comma-separated):</label>
+            <textarea id="skills" name="skills" rows="3" required></textarea>
+
+            <h3>Education</h3>
+            <label for="degree">Degree:</label>
+            <input type="text" id="degree" name="degree" required>
+
+            <label for="university">University:</label>
+            <input type="text" id="university" name="university" required>
+
+            <label for="level">Education Level:</label>
+            <select id="level" name="level" required>
+                <option value="Undergraduate">Undergraduate</option>
+                <option value="Graduate">Graduate</option>
+                <option value="Postgraduate">Postgraduate</option>
+            </select>
+
+            <input type="submit" value="Generate CV">
+        </form>
+    </div>
+
+    <div class="container" id="vectorSection" style="display:none;">
+        <h2>Plot Vectors</h2>
+        <form id="vectorForm">
+            <label for="x">Enter X Coordinate:</label>
+            <input type="number" id="x" required>
+            <label for="y">Enter Y Coordinate:</label>
+            <input type="number" id="y" required>
+            <input type="submit" value="Plot Vector">
+        </form>
+        <canvas id="vectorCanvas" width="400" height="400"></canvas>
+    </div>
+
+    <div class="container" id="stickerSection" style="display:none;">
+        <h2>Create Stickers</h2>
+        <form id="stickerForm">
+            <label for="sticker">Choose Sticker:</label>
+            <select id="sticker" name="sticker">
+                <option value="happy">Happy</option>
+                <option value="crying">Crying</option>
+            </select>
+            <input type="submit" value="Create Sticker">
+        </form>
+        <canvas id="stickerCanvas" width="200" height="200"></canvas>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
     <script>
+        // Show or hide sections
+        function showSection(section) {
+            document.getElementById('cvSection').style.display = (section === 'cv') ? 'block' : 'none';
+            document.getElementById('vectorSection').style.display = (section === 'vector') ? 'block' : 'none';
+            document.getElementById('stickerSection').style.display = (section === 'sticker') ? 'block' : 'none';
+        }
+
+        // CV Creation and Download
         document.getElementById('cvForm').addEventListener('submit', function(event) {
             event.preventDefault();
-
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const modules = document.getElementById('modules').value.split(',');
-            const level = document.getElementById('level').value;
-
-            // Create PDF
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
+            doc.text(20, 20, `Name: ${document.getElementById('name').value}`);
+            doc.text(20, 30, `Email: ${document.getElementById('email').value}`);
+            doc.text(20, 40, `Phone: ${document.getElementById('phone').value}`);
+            doc.text(20, 50, `Address: ${document.getElementById('address').value}`);
+            doc.text(20, 60, `Job Title: ${document.getElementById('jobTitle').value}`);
+            doc.text(20, 70, `Company: ${document.getElementById('company').value}`);
+            doc.text(20, 80, `Skills: ${document.getElementById('skills').value}`);
+            doc.text(20, 90, `Degree: ${document.getElementById('degree').value}`);
+            doc.text(20, 100, `University: ${document.getElementById('university').value}`);
+            doc.save('cv.pdf');
+        });
 
-            doc.text(20, 20, `Name: ${name}`);
-            doc.text(20, 30, `Email: ${email}`);
-            doc.text(20, 40, `Modules: ${modules.join(', ')}`);
-            doc.text(20, 50, `Education Level: ${level}`);
-            doc.text(20, 60, `Job Suggestions: Based on your modules, you could work as a Data Analyst, Scientist, or Engineer.`);
+        // Vector Plotting
+        document.getElementById('vectorForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const canvas = document.getElementById('vectorCanvas');
+            const ctx = canvas.getContext('2d');
+            const x = parseInt(document.getElementById('x').value);
+            const y = parseInt(document.getElementById('y').value);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.moveTo(200, 200);  // Center of canvas
+            ctx.lineTo(200 + x, 200 - y);  // Translate coordinates
+            ctx.stroke();
+        });
 
-            // Save the PDF
-            doc.save(`${name}_CV.pdf`);
+        // Sticker Creation
+        document.getElementById('stickerForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const canvas = document.getElementById('stickerCanvas');
+            const ctx = canvas.getContext('2d');
+            const sticker = document.getElementById('sticker').value;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (sticker === 'happy') {
+                // Draw a happy face
+                ctx.beginPath();
+                ctx.arc(100, 100, 80, 0, Math.PI * 2, true); // Outer circle
+                ctx.moveTo(140, 100);
+                ctx.arc(100, 100, 40, 0, Math.PI, false);  // Mouth (clockwise)
+                ctx.moveTo(80, 80);
+                ctx.arc(80, 80, 10, 0, Math.PI * 2, true);  // Left eye
+                ctx.moveTo(120, 80);
+                ctx.arc(120, 80, 10, 0, Math.PI * 2, true);  // Right eye
+                ctx.stroke();
+            } else if (sticker === 'crying') {
+                // Draw a crying face
+                ctx.beginPath();
+                ctx.arc(100, 100, 80, 0, Math.PI * 2, true); // Outer circle
+                ctx.moveTo(140, 100);
+                ctx.arc(100, 100, 40, 0, Math.PI, false);  // Mouth (clockwise)
+                ctx.moveTo(80, 80);
+                ctx.arc(80, 80, 10, 0, Math.PI * 2, true);  // Left eye
+                ctx.moveTo(120, 80);
+                ctx.arc(120, 80, 10, 0, Math.PI * 2, true);  // Right eye
+                ctx.moveTo(80, 90);
+                ctx.lineTo(80, 130);  // Left tear
+                ctx.moveTo(120, 90);
+                ctx.lineTo(120, 130);  // Right tear
+                ctx.stroke();
+            }
         });
     </script>
+
 </body>
 </html>
-
-
-
-
-
 
