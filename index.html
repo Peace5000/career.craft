@@ -3,145 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi-Functional Web App</title>
+    <title>CV Creation Platform</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f4f4f4;
+            background-color: white;
+            color: black;
+            margin: 0;
             padding: 20px;
         }
+        h1 {
+            color: purple;
+        }
+        h2 {
+            color: skyblue;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 2px solid skyblue;
+            border-radius: 5px;
+        }
         button {
-            padding: 10px 15px;
-            margin: 10px;
-            font-size: 16px;
+            background-color: blue;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
         }
-        canvas {
-            border: 1px solid black;
-            display: block;
-            margin: 20px auto;
+        button:hover {
+            background-color: purple;
         }
-        .piano {
-            display: flex;
-            justify-content: center;
-            margin: 20px 0;
-        }
-        .key {
-            width: 40px;
-            height: 150px;
-            margin: 1px;
-            background-color: white;
-            border: 1px solid black;
-            position: relative;
-            cursor: pointer;
-        }
-        .key.black {
-            width: 30px;
-            height: 100px;
-            background-color: black;
-            position: absolute;
-            left: 30px;
-            margin-left: -15px;
-            z-index: 1;
+        .cv-output {
+            border: 2px solid blue;
+            padding: 20px;
+            margin-top: 20px;
+            background-color: lightgray;
         }
     </style>
 </head>
 <body>
-    <h1>Multi-Functional Web App</h1>
-
-    <h2>1. Create Your CV</h2>
+    <h1>CV Creation Platform</h1>
     <form id="cvForm">
-        <input type="text" id="name" placeholder="Your Name" required>
-        <input type="text" id="email" placeholder="Your Email" required>
-        <input type="text" id="skills" placeholder="Your Skills (comma separated)" required>
-        <input type="text" id="experience" placeholder="Your Experience" required>
-        <input type="button" value="Generate CV" onclick="generateCV()">
-    </form>
-    <div id="cvOutput"></div>
+        <h2>Contact Information</h2>
+        <label for="name">Full Name:</label>
+        <input type="text" id="name" required>
 
-    <h2>2. Piano</h2>
-    <div class="piano">
-        <div class="key" onclick="playNote(261.63)"></div> <!-- C4 -->
-        <div class="key black" onclick="playNote(277.18)"></div> <!-- C#4/Db4 -->
-        <div class="key" onclick="playNote(293.66)"></div> <!-- D4 -->
-        <div class="key black" onclick="playNote(311.13)"></div> <!-- D#4/Eb4 -->
-        <div class="key" onclick="playNote(329.63)"></div> <!-- E4 -->
-        <div class="key" onclick="playNote(349.23)"></div> <!-- F4 -->
-        <div class="key black" onclick="playNote(369.99)"></div> <!-- F#4/Gb4 -->
-        <div class="key" onclick="playNote(392.00)"></div> <!-- G4 -->
-        <div class="key black" onclick="playNote(415.30)"></div> <!-- G#4/Ab4 -->
-        <div class="key" onclick="playNote(440.00)"></div> <!-- A4 -->
-        <div class="key black" onclick="playNote(466.16)"></div> <!-- A#4/Bb4 -->
-        <div class="key" onclick="playNote(493.88)"></div> <!-- B4 -->
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" required>
+
+        <label for="email">Email Address:</label>
+        <input type="email" id="email" required>
+
+        <label for="linkedin">LinkedIn Profile:</label>
+        <input type="url" id="linkedin">
+
+        <h2>Personal Statement</h2>
+        <label for="statement">Brief Summary:</label>
+        <textarea id="statement" rows="3"></textarea>
+
+        <h2>Work Experience</h2>
+        <label for="experience">Previous Jobs (list each with title, company, dates, and key responsibilities):</label>
+        <textarea id="experience" rows="5" required></textarea>
+
+        <h2>Education</h2>
+        <label for="education">Degrees and Institutions:</label>
+        <textarea id="education" rows="3" required></textarea>
+
+        <h2>Skills</h2>
+        <label for="skills">Relevant Skills:</label>
+        <textarea id="skills" rows="3"></textarea>
+
+        <button type="submit">Generate CV</button>
+    </form>
+
+    <div class="cv-output" id="cvOutput" style="display:none;">
+        <h2>Your Generated CV</h2>
+        <div id="cvContent"></div>
     </div>
 
-    <h2>3. Basic Math Functions</h2>
-    <input type="text" id="num1" placeholder="Number 1" required>
-    <input type="text" id="num2" placeholder="Number 2" required>
-    <select id="operation">
-        <option value="add">Add</option>
-        <option value="subtract">Subtract</option>
-        <option value="multiply">Multiply</option>
-        <option value="divide">Divide</option>
-    </select>
-    <input type="button" value="Calculate" onclick="calculate()">
-    <p id="result"></p>
-
     <script>
-        // CV Generation
-        function generateCV() {
+        document.getElementById('cvForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
             const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
             const email = document.getElementById('email').value;
-            const skills = document.getElementById('skills').value.split(',').join(', ');
+            const linkedin = document.getElementById('linkedin').value;
+            const statement = document.getElementById('statement').value;
             const experience = document.getElementById('experience').value;
+            const education = document.getElementById('education').value;
+            const skills = document.getElementById('skills').value;
 
-            const cvOutput = `
-                <h3>${name}'s CV</h3>
-                <p>Email: ${email}</p>
-                <p>Skills: ${skills}</p>
-                <p>Experience: ${experience}</p>
+            const cvContent = `
+                <h3>Contact Information</h3>
+                <p><strong>Name:</strong> ${name}</p>
+                <p><strong>Phone:</strong> ${phone}</p>
+                <p><strong>Email:</strong> ${email}</p>
+                <p><strong>LinkedIn:</strong> <a href="${linkedin}" target="_blank">${linkedin}</a></p>
+
+                <h3>Personal Statement</h3>
+                <p>${statement}</p>
+
+                <h3>Work Experience</h3>
+                <p>${experience}</p>
+
+                <h3>Education</h3>
+                <p>${education}</p>
+
+                <h3>Skills</h3>
+                <p>${skills}</p>
             `;
-            document.getElementById('cvOutput').innerHTML = cvOutput;
-        }
 
-        // Play Notes on Piano
-        function playNote(frequency) {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            oscillator.type = 'sine';
-            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
-            oscillator.connect(audioContext.destination);
-            oscillator.start();
-            oscillator.stop(audioContext.currentTime + 0.5); // Play sound for half a second
-        }
-
-        // Basic Math Functions
-        function calculate() {
-            const num1 = parseFloat(document.getElementById('num1').value);
-            const num2 = parseFloat(document.getElementById('num2').value);
-            const operation = document.getElementById('operation').value;
-            let result;
-
-            switch (operation) {
-                case 'add':
-                    result = num1 + num2;
-                    break;
-                case 'subtract':
-                    result = num1 - num2;
-                    break;
-                case 'multiply':
-                    result = num1 * num2;
-                    break;
-                case 'divide':
-                    result = num1 / num2;
-                    break;
-                default:
-                    result = 'Invalid operation';
-            }
-
-            document.getElementById('result').innerText = `Result: ${result}`;
-        }
+            document.getElementById('cvContent').innerHTML = cvContent;
+            document.getElementById('cvOutput').style.display = 'block';
+        });
     </script>
 </body>
 </html>
