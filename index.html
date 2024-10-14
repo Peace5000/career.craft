@@ -3,25 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drawing Request Form</title>
+    <title>Shape and Sticker Drawing</title>
     <style>
         canvas {
             border: 1px solid black;
             display: block;
             margin: 20px auto;
         }
+        body {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-    <h1>Welcome to the Drawing Request Page!</h1>
-    <p>Please select what you'd like me to draw for you:</p>
+    <h1>Welcome to the Shape and Sticker Drawing Page!</h1>
+    <p>Please select a shape or sticker to draw:</p>
 
     <form id="drawingForm">
         <label for="drawing">Choose a drawing:</label>
         <select id="drawing" name="drawing">
-            <option value="cat">Cat</option>
-            <option value="dog">Dog</option>
-            <option value="tree">Tree</option>
+            <option value="cat">Cat Sticker</option>
+            <option value="heart">Heart Sticker</option>
+            <option value="crying">Crying Sticker</option>
+            <option value="hi-five">Hi-Five Sticker</option>
+            <option value="walking">Walking Sticker</option>
         </select>
         <br><br>
 
@@ -44,56 +49,99 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
 
             if (type === 'cat') {
-                drawCat();
-            } else if (type === 'dog') {
-                drawDog();
-            } else if (type === 'tree') {
-                drawTree();
+                drawCatSticker();
+            } else if (type === 'heart') {
+                drawHeartSticker();
+            } else if (type === 'crying') {
+                drawCryingSticker();
+            } else if (type === 'hi-five') {
+                drawHiFiveSticker();
+            } else if (type === 'walking') {
+                drawWalkingSticker();
             }
         }
 
-        function drawCat() {
-            // Drawing a simple cat face
+        function drawCatSticker() {
+            // Draw a simple cat face sticker
+            ctx.fillStyle = "orange";
             ctx.beginPath();
-            ctx.arc(200, 200, 100, 0, Math.PI * 2, true); // Outer circle (face)
-            ctx.moveTo(250, 200);
-            ctx.arc(180, 180, 20, 0, Math.PI * 2, true); // Left ear
-            ctx.moveTo(300, 180);
-            ctx.arc(220, 180, 20, 0, Math.PI * 2, true); // Right ear
-            ctx.moveTo(250, 250);
-            ctx.arc(250, 200, 50, 0, Math.PI, false);  // Mouth
-            ctx.stroke();
-        }
-
-        function drawDog() {
-            // Drawing a simple dog face
+            ctx.arc(200, 200, 50, 0, Math.PI * 2, true); // Cat face
+            ctx.fill();
+            ctx.fillStyle = "black";
             ctx.beginPath();
-            ctx.arc(200, 200, 100, 0, Math.PI * 2, true); // Outer circle (face)
-            ctx.moveTo(150, 150);
-            ctx.arc(180, 180, 20, 0, Math.PI * 2, true); // Left ear
-            ctx.moveTo(250, 150);
-            ctx.arc(220, 180, 20, 0, Math.PI * 2, true); // Right ear
-            ctx.moveTo(150, 250);
-            ctx.arc(200, 220, 40, 0, Math.PI, false);  // Mouth
-            ctx.stroke();
-        }
-
-        function drawTree() {
-            // Drawing a simple tree
-            ctx.fillStyle = "brown";
-            ctx.fillRect(180, 250, 40, 150); // Trunk
-
+            ctx.arc(180, 190, 5, 0, Math.PI * 2, true); // Left eye
+            ctx.arc(220, 190, 5, 0, Math.PI * 2, true); // Right eye
+            ctx.fill();
             ctx.beginPath();
-            ctx.moveTo(150, 250);
-            ctx.lineTo(250, 250);
-            ctx.lineTo(200, 150);
+            ctx.moveTo(200, 210);
+            ctx.lineTo(190, 220);
+            ctx.lineTo(210, 220);
             ctx.closePath();
-            ctx.fillStyle = "green";
-            ctx.fill(); // Leaves
+            ctx.fill(); // Cat mouth
+        }
+
+        function drawHeartSticker() {
+            ctx.fillStyle = "red";
+            ctx.beginPath();
+            ctx.moveTo(200, 250);
+            ctx.bezierCurveTo(200, 200, 150, 200, 150, 250);
+            ctx.bezierCurveTo(150, 300, 200, 350, 200, 350);
+            ctx.bezierCurveTo(200, 350, 250, 300, 250, 250);
+            ctx.bezierCurveTo(250, 200, 200, 200, 200, 250);
+            ctx.fill();
+        }
+
+        function drawCryingSticker() {
+            ctx.fillStyle = "yellow";
+            ctx.beginPath();
+            ctx.arc(200, 200, 50, 0, Math.PI * 2, true); // Face
+            ctx.fill();
+            ctx.fillStyle = "black";
+            ctx.beginPath();
+            ctx.arc(180, 190, 5, 0, Math.PI * 2, true); // Left eye
+            ctx.arc(220, 190, 5, 0, Math.PI * 2, true); // Right eye
+            ctx.fill();
+            ctx.fillStyle = "blue";
+            ctx.beginPath();
+            ctx.moveTo(180, 210);
+            ctx.lineTo(220, 210); // Mouth
+            ctx.stroke();
+            ctx.fillStyle = "blue";
+            ctx.beginPath();
+            ctx.arc(180, 220, 10, Math.PI, Math.PI * 1.5, true); // Tear left
+            ctx.arc(220, 220, 10, Math.PI, Math.PI * 1.5, true); // Tear right
+            ctx.fill();
+        }
+
+        function drawHiFiveSticker() {
+            ctx.fillStyle = "orange";
+            ctx.beginPath();
+            ctx.moveTo(150, 150);
+            ctx.lineTo(250, 150);
+            ctx.lineTo(200, 100);
+            ctx.closePath();
+            ctx.fill();
+            ctx.fillStyle = "black";
+            ctx.fillRect(195, 150, 10, 50); // Arm
+            ctx.fillRect(175, 175, 50, 10); // Hand
+        }
+
+        function drawWalkingSticker() {
+            ctx.fillStyle = "blue";
+            ctx.fillRect(180, 200, 40, 60); // Body
+            ctx.fillStyle = "black";
+            ctx.fillRect(170, 200, 10, 40); // Left leg
+            ctx.fillRect(220, 200, 10, 40); // Right leg
+            ctx.fillStyle = "brown";
+            ctx.beginPath();
+            ctx.arc(200, 170, 20, 0, Math.PI * 2, true); // Head
+            ctx.fill();
         }
     </script>
 </body>
 </html>
+  
+
 <a href="shapes.html">Go to the Colorful Shapes Drawing Page</a>
 <a href="stickers.html">Go to the Sticker Drawing Page</a>
 
