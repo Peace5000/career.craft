@@ -115,7 +115,7 @@
         <textarea id="skills" name="skills" rows="4" placeholder="List your skills"></textarea>
     </div>
 
-    <button type="submit">Generate CV</button>
+    <button onclick="generateCV()">Generate and Download CV</button>
 
     <script>
         function addWorkExperience() {
@@ -153,6 +153,58 @@
                 <input type="text" name="graduation" placeholder="Enter your graduation date">
             `;
             educationSection.appendChild(newEducation);
+        }
+
+        function generateCV() {
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const statement = document.getElementById('statement').value;
+            const skills = document.getElementById('skills').value;
+            
+            let workExperienceText = '';
+            document.querySelectorAll('.work-experience').forEach((workExp, index) => {
+                const jobTitle = workExp.querySelector('input[name="job-title"]').value;
+                const company = workExp.querySelector('input[name="company"]').value;
+                const dates = workExp.querySelector('input[name="dates"]').value;
+                const responsibilities = workExp.querySelector('textarea[name="responsibilities"]').value;
+                
+                workExperienceText += `
+                Job Title: ${jobTitle}\n
+                Company: ${company}\n
+                Dates: ${dates}\n
+                Responsibilities:\n${responsibilities}\n\n
+                `;
+            });
+
+            let educationText = '';
+            document.querySelectorAll('.education').forEach((edu, index) => {
+                const degree = edu.querySelector('input[name="degree"]').value;
+                const institution = edu.querySelector('input[name="institution"]').value;
+                const graduation = edu.querySelector('input[name="graduation"]').value;
+                
+                educationText += `
+                Degree: ${degree}\n
+                Institution: ${institution}\n
+                Graduation Date: ${graduation}\n\n
+                `;
+            });
+
+            const cvText = `
+            Name: ${name}\n
+            Phone: ${phone}\n
+            Email: ${email}\n\n
+            Personal Statement:\n${statement}\n\n
+            Skills:\n${skills}\n\n
+            Work Experience:\n${workExperienceText}\n
+            Education:\n${educationText}
+            `;
+
+            const blob = new Blob([cvText], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${name}-CV.txt`;
+            link.click();
         }
     </script>
 
