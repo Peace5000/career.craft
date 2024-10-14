@@ -25,8 +25,14 @@
             width: 100%;
             padding: 10px;
             margin: 5px 0;
-            border: 2px solid skyblue;
-            border-radius: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .section {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
         }
         button {
             background-color: blue;
@@ -37,119 +43,121 @@
             cursor: pointer;
         }
         button:hover {
-            background-color: purple;
-        }
-        .cv-output {
-            border: 2px solid blue;
-            padding: 20px;
-            margin-top: 20px;
-            background-color: lightgray;
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
+
     <h1>CV Creation Platform</h1>
-    <form id="cvForm">
+    <p>Please fill in your details to create a professional CV.</p>
+
+    <!-- Contact Information Section -->
+    <div class="section">
         <h2>Contact Information</h2>
-        <label for="name">Full Name:</label>
-        <input type="text" id="name" required>
+        <label for="name">Full Name</label>
+        <input type="text" id="name" placeholder="Enter your full name">
 
-        <label for="phone">Phone Number:</label>
-        <input type="tel" id="phone" required>
+        <label for="email">Email Address</label>
+        <input type="email" id="email" placeholder="Enter your email address">
 
-        <label for="email">Email Address:</label>
-        <input type="email" id="email" required>
-
-        <h2>Personal Statement</h2>
-        <label for="statement">Brief Summary (Career goals and skills):</label>
-        <textarea id="statement" rows="3" required></textarea>
-
-        <h2>Work Experience</h2>
-        <label for="experience">Previous Jobs (list each with title, company, dates, and key responsibilities):</label>
-        <textarea id="experience" rows="5" required></textarea>
-
-        <h2>Education</h2>
-        <label for="education">Degrees and Institutions:</label>
-        <textarea id="education" rows="3" required></textarea>
-
-        <h2>Skills</h2>
-        <label for="skills">Relevant Skills:</label>
-        <textarea id="skills" rows="3" required></textarea>
-
-        <h2>Certifications</h2>
-        <label for="certifications">Professional Certifications:</label>
-        <textarea id="certifications" rows="2"></textarea>
-
-        <h2>Projects</h2>
-        <label for="projects">Significant Projects:</label>
-        <textarea id="projects" rows="3"></textarea>
-
-        <h2>Awards and Honors</h2>
-        <label for="awards">Recognitions:</label>
-        <textarea id="awards" rows="2"></textarea>
-
-        <h2>Hobbies and Interests</h2>
-        <label for="hobbies">Relevant Hobbies:</label>
-        <textarea id="hobbies" rows="2"></textarea>
-
-        <button type="submit">Generate CV</button>
-    </form>
-
-    <div class="cv-output" id="cvOutput" style="display:none;">
-        <h2>Your Generated CV</h2>
-        <div id="cvContent"></div>
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" placeholder="Enter your phone number">
     </div>
 
+    <!-- Personal Statement Section -->
+    <div class="section">
+        <h2>Personal Statement</h2>
+        <label for="statement">Brief Summary</label>
+        <textarea id="statement" rows="4" placeholder="Write a brief summary of your skills, experience, and career goals."></textarea>
+    </div>
+
+    <!-- Work Experience Section -->
+    <div class="section" id="work-experience-section">
+        <h2>Work Experience</h2>
+
+        <div class="work-experience">
+            <label for="job-title-1">Job Title</label>
+            <input type="text" id="job-title-1" placeholder="Enter job title">
+
+            <label for="company-1">Company Name</label>
+            <input type="text" id="company-1" placeholder="Enter company name">
+
+            <label for="location-1">Location</label>
+            <input type="text" id="location-1" placeholder="Enter location">
+
+            <label for="dates-1">Dates of Employment</label>
+            <input type="text" id="dates-1" placeholder="Enter employment dates">
+
+            <label for="responsibilities-1">Key Responsibilities and Achievements</label>
+            <textarea id="responsibilities-1" rows="4" placeholder="Describe your responsibilities and achievements."></textarea>
+        </div>
+
+        <button onclick="addWorkExperience()">Add More Work Experience</button>
+    </div>
+
+    <!-- Education Section -->
+    <div class="section" id="education-section">
+        <h2>Education</h2>
+
+        <div class="education">
+            <label for="degree-1">Degree/Qualification</label>
+            <input type="text" id="degree-1" placeholder="Enter your degree or qualification">
+
+            <label for="institution-1">Institution Name</label>
+            <input type="text" id="institution-1" placeholder="Enter the name of your institution">
+
+            <label for="graduation-1">Graduation Date</label>
+            <input type="text" id="graduation-1" placeholder="Enter your graduation date">
+
+            <label for="education-description-1">Description (Optional)</label>
+            <textarea id="education-description-1" rows="3" placeholder="Describe any relevant coursework, honors, or awards (optional)."></textarea>
+        </div>
+
+        <button onclick="addEducation()">Add More Education</button>
+    </div>
+
+    <!-- Skills Section -->
+    <div class="section">
+        <h2>Skills</h2>
+        <label for="skills">List Your Skills</label>
+        <textarea id="skills" rows="4" placeholder="Enter skills relevant to the job (e.g., technical skills, languages)."></textarea>
+    </div>
+
+    <!-- Certifications, Projects, and Awards Section -->
+    <div class="section">
+        <h2>Additional Information</h2>
+
+        <label for="certifications">Certifications (Optional)</label>
+        <textarea id="certifications" rows="3" placeholder="Enter any certifications relevant to the job."></textarea>
+
+        <label for="projects">Projects (Optional)</label>
+        <textarea id="projects" rows="3" placeholder="Describe any significant projects."></textarea>
+
+        <label for="awards">Awards and Honors (Optional)</label>
+        <textarea id="awards" rows="3" placeholder="Enter any recognitions or honors."></textarea>
+    </div>
+
+    <!-- Submit Button -->
+    <button onclick="submitCV()">Generate CV</button>
+
     <script>
-        document.getElementById('cvForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+        let workCount = 1;
+        let educationCount = 1;
 
-            const name = document.getElementById('name').value;
-            const phone = document.getElementById('phone').value;
-            const email = document.getElementById('email').value;
-            const statement = document.getElementById('statement').value;
-            const experience = document.getElementById('experience').value;
-            const education = document.getElementById('education').value;
-            const skills = document.getElementById('skills').value;
-            const certifications = document.getElementById('certifications').value;
-            const projects = document.getElementById('projects').value;
-            const awards = document.getElementById('awards').value;
-            const hobbies = document.getElementById('hobbies').value;
+        // Function to add more work experience
+        function addWorkExperience() {
+            workCount++;
+            const workExperienceSection = document.getElementById('work-experience-section');
+            const newWorkExperience = `
+                <div class="work-experience">
+                    <label for="job-title-${workCount}">Job Title</label>
+                    <input type="text" id="job-title-${workCount}" placeholder="Enter job title">
 
-            const cvContent = `
-                <h3>Contact Information</h3>
-                <p><strong>Name:</strong> ${name}</p>
-                <p><strong>Phone:</strong> ${phone}</p>
-                <p><strong>Email:</strong> ${email}</p>
+                    <label for="company-${workCount}">Company Name</label>
+                    <input type="text" id="company-${workCount}" placeholder="Enter company name">
 
-                <h3>Personal Statement</h3>
-                <p>${statement}</p>
+                    <label for="location-${workCount}">Location</label>
+                    <input type="text" id="location-${workCount}" placeholder="Enter location">
 
-                <h3>Work Experience</h3>
-                <p>${experience}</p>
-
-                <h3>Education</h3>
-                <p>${education}</p>
-
-                <h3>Skills</h3>
-                <p>${skills}</p>
-
-                <h3>Certifications</h3>
-                <p>${certifications}</p>
-
-                <h3>Projects</h3>
-                <p>${projects}</p>
-
-                <h3>Awards and Honors</h3>
-                <p>${awards}</p>
-
-                <h3>Hobbies and Interests</h3>
-                <p>${hobbies}</p>
-            `;
-
-            document.getElementById('cvContent').innerHTML = cvContent;
-            document.getElementById('cvOutput').style.display = 'block';
-        });
-    </script>
-</body>
-</html>
+                    <label for="dates
