@@ -54,15 +54,21 @@
         input[type="submit"]:hover {
             background-color: #45a049;
         }
+        #gameCanvas {
+            border: 2px solid black;
+            position: relative;
+            background-color: #e0e0e0;
+        }
     </style>
 </head>
 <body>
 
-    <h1>Welcome to CareerCraft!By Peace Khutso The Tech Engineer</h1>
+    <h1>Welcome to CareerCraft!</h1>
     <nav>
         <a href="#" onclick="showSection('cv')">Create CV</a>
         <a href="#" onclick="showSection('vector')">Plot Vectors</a>
         <a href="#" onclick="showSection('sticker')">Create Stickers</a>
+        <a href="#" onclick="showSection('game')">Play Racing Game</a>
     </nav>
 
     <!-- CV Section -->
@@ -148,6 +154,13 @@
         <canvas id="stickerCanvas" width="200" height="200"></canvas>
     </div>
 
+    <!-- Racing Game Section -->
+    <div class="container" id="gameSection" style="display:none;">
+        <h2>Play Racing Game</h2>
+        <canvas id="gameCanvas" width="600" height="400"></canvas>
+        <button onclick="startGame()">Start Game</button>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
     <script>
         // Show or hide sections
@@ -155,6 +168,7 @@
             document.getElementById('cvSection').style.display = (section === 'cv') ? 'block' : 'none';
             document.getElementById('vectorSection').style.display = (section === 'vector') ? 'block' : 'none';
             document.getElementById('stickerSection').style.display = (section === 'sticker') ? 'block' : 'none';
+            document.getElementById('gameSection').style.display = (section === 'game') ? 'block' : 'none';
         }
 
         // CV Creation and Download
@@ -183,14 +197,13 @@
             const y = parseInt(document.getElementById('y').value);
             const z = parseInt(document.getElementById('z').value);
             const w = parseInt(document.getElementById('w').value);
-
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Draw the vector based on coordinates
             ctx.beginPath();
-            ctx.moveTo(200, 200);  // Center of canvas
-            ctx.lineTo(200 + x * 10, 200 - y * 10);  // X and Y vectors
+            ctx.moveTo(200, 200); // Start point
+            ctx.lineTo(200 + x * 10, 200 - y * 10); // Draw vector
+            ctx.strokeStyle = 'blue';
             ctx.stroke();
+            ctx.fillText(`Vector: (${x}, ${y}, ${z || 0}, ${w || 0})`, 10, 10);
         });
 
         // Sticker Creation
@@ -199,7 +212,6 @@
             const canvas = document.getElementById('stickerCanvas');
             const ctx = canvas.getContext('2d');
             const sticker = document.getElementById('sticker').value;
-
             ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
 
             // Draw the selected sticker
@@ -267,8 +279,61 @@
             }
         });
 
-        // Show the CV section by default
-        showSection('cv');
+        // Racing Game Variables
+        let canvas, ctx, car, keys, gameInterval;
+
+        // Start Game
+        function startGame() {
+            canvas = document.getElementById('gameCanvas');
+            ctx = canvas.getContext('2d');
+            car = { x: 275, y: 350, width: 50, height: 100 }; // Car dimensions
+            keys = {};
+            gameInterval = setInterval(updateGameArea, 20);
+            window.addEventListener('keydown', (e) => {
+                keys[e.key] = true;
+            });
+            window.addEventListener('keyup', (e) => {
+                keys[e.key] = false;
+            });
+        }
+
+        // Update Game Area
+        function updateGameArea() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawRoad();
+            drawCar();
+            moveCar();
+        }
+
+        // Draw Road
+        function drawRoad() {
+            ctx.fillStyle = 'gray';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'white';
+            ctx.fillRect(canvas.width / 2 - 5, 0, 10, canvas.height); // Center line
+        }
+
+        // Draw Car
+        function drawCar() {
+            ctx.fillStyle = 'red';
+            ctx.fillRect(car.x, car.y, car.width, car.height);
+        }
+
+        // Move Car
+        function moveCar() {
+            if (keys['ArrowLeft'] && car.x > 0) {
+                car.x -= 5; // Move left
+            }
+            if (keys['ArrowRight'] && car.x < canvas.width - car.width) {
+                car.x += 5; // Move right
+            }
+            if (keys['ArrowUp'] && car.y > 0) {
+                car.y -= 5; // Move up
+            }
+            if (keys['ArrowDown'] && car.y < canvas.height - car.height) {
+                car.y += 5; // Move down
+            }
+        }
     </script>
 </body>
 </html>
