@@ -22,11 +22,34 @@
             display: block;
             margin: 20px auto;
         }
+        .piano {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .key {
+            width: 40px;
+            height: 150px;
+            margin: 1px;
+            background-color: white;
+            border: 1px solid black;
+            position: relative;
+            cursor: pointer;
+        }
+        .key.black {
+            width: 30px;
+            height: 100px;
+            background-color: black;
+            position: absolute;
+            left: 30px;
+            margin-left: -15px;
+            z-index: 1;
+        }
     </style>
 </head>
 <body>
     <h1>Multi-Functional Web App</h1>
-    
+
     <h2>1. Create Your CV</h2>
     <form id="cvForm">
         <input type="text" id="name" placeholder="Your Name" required>
@@ -37,21 +60,33 @@
     </form>
     <div id="cvOutput"></div>
 
-    <h2>2. Plot Vectors</h2>
-    <canvas id="vectorCanvas" width="400" height="400"></canvas>
-    <input type="text" id="vectorInput" placeholder="Enter vectors (e.g., 1,2; 3,4)" required>
-    <input type="button" value="Plot Vectors" onclick="plotVectors()">
+    <h2>2. Piano</h2>
+    <div class="piano">
+        <div class="key" onclick="playNote(261.63)"></div> <!-- C4 -->
+        <div class="key black" onclick="playNote(277.18)"></div> <!-- C#4/Db4 -->
+        <div class="key" onclick="playNote(293.66)"></div> <!-- D4 -->
+        <div class="key black" onclick="playNote(311.13)"></div> <!-- D#4/Eb4 -->
+        <div class="key" onclick="playNote(329.63)"></div> <!-- E4 -->
+        <div class="key" onclick="playNote(349.23)"></div> <!-- F4 -->
+        <div class="key black" onclick="playNote(369.99)"></div> <!-- F#4/Gb4 -->
+        <div class="key" onclick="playNote(392.00)"></div> <!-- G4 -->
+        <div class="key black" onclick="playNote(415.30)"></div> <!-- G#4/Ab4 -->
+        <div class="key" onclick="playNote(440.00)"></div> <!-- A4 -->
+        <div class="key black" onclick="playNote(466.16)"></div> <!-- A#4/Bb4 -->
+        <div class="key" onclick="playNote(493.88)"></div> <!-- B4 -->
+    </div>
 
-    <h2>3. Animal Sounds</h2>
-    <button onclick="playSound('dog')">Dog</button>
-    <button onclick="playSound('cat')">Cat</button>
-    <button onclick="playSound('cow')">Cow</button>
-    <button onclick="playSound('sheep')">Sheep</button>
-
-    <h2>4. Simple Game: Click the Button!</h2>
-    <p id="gameMessage">Click the button to score!</p>
-    <button onclick="playGame()">Score a Point</button>
-    <p id="score">Score: 0</p>
+    <h2>3. Basic Math Functions</h2>
+    <input type="text" id="num1" placeholder="Number 1" required>
+    <input type="text" id="num2" placeholder="Number 2" required>
+    <select id="operation">
+        <option value="add">Add</option>
+        <option value="subtract">Subtract</option>
+        <option value="multiply">Multiply</option>
+        <option value="divide">Divide</option>
+    </select>
+    <input type="button" value="Calculate" onclick="calculate()">
+    <p id="result"></p>
 
     <script>
         // CV Generation
@@ -70,58 +105,42 @@
             document.getElementById('cvOutput').innerHTML = cvOutput;
         }
 
-        // Vector Plotting
-        function plotVectors() {
-            const input = document.getElementById('vectorInput').value;
-            const vectors = input.split(';');
-            const canvas = document.getElementById('vectorCanvas');
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
-            ctx.translate(200, 200); // Move origin to center
-
-            vectors.forEach(vector => {
-                const [x, y] = vector.split(',').map(Number);
-                ctx.beginPath();
-                ctx.moveTo(0, 0);
-                ctx.lineTo(x * 20, -y * 20); // Scale for visibility
-                ctx.stroke();
-            });
-        }
-
-        // Play Animal Sounds
-        function playSound(animal) {
-            let audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            let oscillator = audioContext.createOscillator();
-            oscillator.type = 'square'; // Change type for different sounds
-
-            switch (animal) {
-                case 'dog':
-                    oscillator.frequency.setValueAtTime(440, audioContext.currentTime); // A4
-                    break;
-                case 'cat':
-                    oscillator.frequency.setValueAtTime(523, audioContext.currentTime); // C5
-                    break;
-                case 'cow':
-                    oscillator.frequency.setValueAtTime(587, audioContext.currentTime); // D5
-                    break;
-                case 'sheep':
-                    oscillator.frequency.setValueAtTime(659, audioContext.currentTime); // E5
-                    break;
-                default:
-                    break;
-            }
-
+        // Play Notes on Piano
+        function playNote(frequency) {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
             oscillator.connect(audioContext.destination);
             oscillator.start();
             oscillator.stop(audioContext.currentTime + 0.5); // Play sound for half a second
         }
 
-        // Simple Game
-        let score = 0;
-        function playGame() {
-            score++;
-            document.getElementById('score').innerText = `Score: ${score}`;
-            document.getElementById('gameMessage').innerText = "You scored! Keep going!";
+        // Basic Math Functions
+        function calculate() {
+            const num1 = parseFloat(document.getElementById('num1').value);
+            const num2 = parseFloat(document.getElementById('num2').value);
+            const operation = document.getElementById('operation').value;
+            let result;
+
+            switch (operation) {
+                case 'add':
+                    result = num1 + num2;
+                    break;
+                case 'subtract':
+                    result = num1 - num2;
+                    break;
+                case 'multiply':
+                    result = num1 * num2;
+                    break;
+                case 'divide':
+                    result = num1 / num2;
+                    break;
+                default:
+                    result = 'Invalid operation';
+            }
+
+            document.getElementById('result').innerText = `Result: ${result}`;
         }
     </script>
 </body>
