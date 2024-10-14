@@ -3,76 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CV Creation Page</title>
+    <title>CV Creation</title>
     <style>
-        canvas {
-            border: 1px solid black;
-            display: block;
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
             margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .cv {
+            border: 1px solid #000;
+            padding: 20px;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to the CV Creation Page!</h1>
-    <p>Please enter your science modules:</p>
-
-    <form id="cvForm">
-        <label for="modules">Science Modules:</label><br>
-        <input type="text" id="modules" name="modules" required><br><br>
+    <div class="container">
+        <h1>Create Your CV</h1>
+        <form id="cvForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" required><br><br>
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" required><br><br>
+            
+            <label for="education">Education:</label>
+            <input type="text" id="education" required><br><br>
+            
+            <label for="experience">Experience:</label>
+            <input type="text" id="experience" required><br><br>
+            
+            <label for="skills">Skills:</label>
+            <input type="text" id="skills" required><br><br>
+            
+            <input type="submit" value="Create CV">
+        </form>
         
-        <input type="submit" value="Create CV">
-    </form>
-
-    <canvas id="canvas" width="200" height="200"></canvas>
-
-    <div id="message" style="text-align: center; margin-top: 20px;"></div>
+        <div class="cv" id="cvOutput" style="display:none;"></div>
+    </div>
 
     <script>
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-
         document.getElementById('cvForm').addEventListener('submit', function(event) {
-            event.preventDefault();  // Prevent form submission
-            const modules = document.getElementById('modules').value;
-            generateCV(modules);
+            event.preventDefault();
+
+            // Get form values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const education = document.getElementById('education').value;
+            const experience = document.getElementById('experience').value;
+            const skills = document.getElementById('skills').value;
+
+            // Create CV output
+            const cvOutput = `
+                <h2>${name}'s CV</h2>
+                <p><strong>Email:</strong> ${email}</p>
+                <p><strong>Education:</strong> ${education}</p>
+                <p><strong>Experience:</strong> ${experience}</p>
+                <p><strong>Skills:</strong> ${skills}</p>
+                <h3>Congratulations!</h3>
+                <p>Wow, you're a genius! 🎉</p>
+            `;
+
+            // Display CV
+            const cvDiv = document.getElementById('cvOutput');
+            cvDiv.innerHTML = cvOutput;
+            cvDiv.style.display = 'block';
         });
-
-        function generateCV(modules) {
-            document.getElementById('message').innerHTML = `Wow, you're a genius! You've entered: ${modules}`;
-            drawSticker();  // Draw happy sticker
-            suggestJobs(modules);
-        }
-
-        function drawSticker() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
-            
-            // Draw a happy face (sticker)
-            ctx.fillStyle = 'yellow';
-            ctx.beginPath();
-            ctx.arc(100, 100, 80, 0, Math.PI * 2, true); // Outer circle
-            ctx.fill();
-            ctx.stroke();
-
-            // Eyes
-            ctx.fillStyle = 'black';
-            ctx.beginPath();
-            ctx.arc(70, 80, 10, 0, Math.PI * 2, true); // Left eye
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(130, 80, 10, 0, Math.PI * 2, true); // Right eye
-            ctx.fill();
-
-            // Mouth
-            ctx.beginPath();
-            ctx.arc(100, 110, 40, 0, Math.PI, false); // Mouth (smile)
-            ctx.stroke();
-        }
-
-        function suggestJobs(modules) {
-            const jobSuggestions = ['Research Scientist', 'Lab Technician', 'Data Analyst'];
-            document.getElementById('message').innerHTML += `<br>Based on your modules, you can consider these jobs: <strong>${jobSuggestions.join(', ')}</strong>`;
-        }
     </script>
 </body>
 </html>
-
