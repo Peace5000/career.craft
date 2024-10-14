@@ -7,206 +7,174 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: white;
+            background-color: skyblue;
             color: black;
-            margin: 0;
             padding: 20px;
+            max-width: 900px;
+            margin: auto;
         }
+
         h1 {
             color: purple;
+            text-align: center;
         }
-        h2 {
-            color: skyblue;
+
+        .section {
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
         }
+
         label {
             font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
         }
-        input, select, textarea {
+
+        input, textarea, select {
             width: 100%;
             padding: 10px;
-            margin: 5px 0;
-            border: 1px solid black;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
             border-radius: 5px;
         }
-        .section {
-            background-color: #f0f8ff;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 10px;
-        }
+
         button {
             background-color: blue;
             color: white;
-            padding: 10px;
+            padding: 10px 20px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
         }
+
         button:hover {
             background-color: darkblue;
         }
-        .work-experience, .education {
-            margin-bottom: 20px;
+
+        .add-more {
+            margin-bottom: 10px;
+            color: blue;
+            cursor: pointer;
+        }
+
+        .add-more:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
+    <h1>Create Your Professional CV</h1>
 
-    <h1>CV Creation Platform</h1>
-    
-    <div class="section">
-        <h2>Contact Information</h2>
-        <label for="name">Full Name:</label>
-        <input type="text" id="name" name="name" placeholder="Enter your full name">
-        
-        <label for="phone">Phone Number:</label>
-        <input type="text" id="phone" name="phone" placeholder="Enter your phone number">
-        
-        <label for="email">Email Address:</label>
-        <input type="email" id="email" name="email" placeholder="Enter your email address">
-    </div>
+    <form id="cvForm">
+        <!-- Contact Information -->
+        <div class="section">
+            <h2>Contact Information</h2>
+            <label for="name">Full Name</label>
+            <input type="text" id="name" placeholder="Enter your full name">
 
-    <div class="section">
-        <h2>Personal Statement</h2>
-        <label for="statement">Brief Summary:</label>
-        <textarea id="statement" name="statement" rows="4" placeholder="Summarize your skills and career goals"></textarea>
-    </div>
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" placeholder="Enter your phone number">
 
-    <div class="section">
-        <h2>Work Experience</h2>
-        <div id="work-experience-section">
-            <div class="work-experience">
-                <label for="job-title">Job Title:</label>
-                <input type="text" name="job-title" placeholder="Enter your job title">
-                
-                <label for="company">Company Name:</label>
-                <input type="text" name="company" placeholder="Enter the company name">
-                
-                <label for="dates">Dates of Employment:</label>
-                <input type="text" name="dates" placeholder="Enter dates of employment">
-                
-                <label for="responsibilities">Key Responsibilities:</label>
-                <textarea name="responsibilities" rows="4" placeholder="List your responsibilities"></textarea>
-            </div>
+            <label for="email">Email Address</label>
+            <input type="email" id="email" placeholder="Enter your email">
         </div>
-        <button type="button" onclick="addWorkExperience()">Add More Work Experience</button>
-    </div>
 
-    <div class="section">
-        <h2>Education</h2>
-        <div id="education-section">
-            <div class="education">
-                <label for="degree">Degree/Qualification:</label>
-                <input type="text" name="degree" placeholder="Enter your degree or qualification">
-                
-                <label for="institution">Institution:</label>
-                <input type="text" name="institution" placeholder="Enter the name of the institution">
-                
-                <label for="graduation">Graduation Date:</label>
-                <input type="text" name="graduation" placeholder="Enter your graduation date">
-            </div>
+        <!-- Personal Statement -->
+        <div class="section">
+            <h2>Personal Statement</h2>
+            <label for="statement">Brief Summary</label>
+            <textarea id="statement" rows="4" placeholder="Write a brief summary of your skills and career goals"></textarea>
         </div>
-        <button type="button" onclick="addEducation()">Add More Education</button>
-    </div>
 
-    <div class="section">
-        <h2>Skills</h2>
-        <label for="skills">Relevant Skills:</label>
-        <textarea id="skills" name="skills" rows="4" placeholder="List your skills"></textarea>
-    </div>
+        <!-- Work Experience -->
+        <div class="section">
+            <h2>Work Experience</h2>
+            <div id="work-experience-section">
+                <div class="work-experience">
+                    <label for="job-title">Job Title</label>
+                    <input type="text" class="job-title" placeholder="Enter job title">
 
-    <button onclick="generateCV()">Generate and Download CV</button>
+                    <label for="company">Company Name</label>
+                    <input type="text" class="company" placeholder="Enter company name">
+
+                    <label for="dates">Dates of Employment</label>
+                    <input type="text" class="dates" placeholder="Enter employment dates">
+
+                    <label for="responsibilities">Key Responsibilities</label>
+                    <textarea class="responsibilities" rows="3" placeholder="Enter your key responsibilities"></textarea>
+                </div>
+            </div>
+            <span class="add-more" id="add-work">+ Add More Work Experience</span>
+        </div>
+
+        <!-- Education -->
+        <div class="section">
+            <h2>Education</h2>
+            <div id="education-section">
+                <div class="education">
+                    <label for="degree">Degree/Qualification</label>
+                    <input type="text" class="degree" placeholder="Enter your degree/qualification">
+
+                    <label for="institution">Institution</label>
+                    <input type="text" class="institution" placeholder="Enter institution name">
+
+                    <label for="graduation">Graduation Date</label>
+                    <input type="text" class="graduation" placeholder="Enter graduation date">
+                </div>
+            </div>
+            <span class="add-more" id="add-education">+ Add More Education</span>
+        </div>
+
+        <!-- Skills -->
+        <div class="section">
+            <h2>Skills</h2>
+            <label for="skills">List Your Skills</label>
+            <textarea id="skills" rows="4" placeholder="List your skills, separated by commas"></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="button" id="generateCV">Generate CV</button>
+    </form>
 
     <script>
-        function addWorkExperience() {
-            const workExperienceSection = document.getElementById('work-experience-section');
-            const newWorkExperience = document.createElement('div');
-            newWorkExperience.classList.add('work-experience');
-            newWorkExperience.innerHTML = `
-                <label for="job-title">Job Title:</label>
-                <input type="text" name="job-title" placeholder="Enter your job title">
-                
-                <label for="company">Company Name:</label>
-                <input type="text" name="company" placeholder="Enter the company name">
-                
-                <label for="dates">Dates of Employment:</label>
-                <input type="text" name="dates" placeholder="Enter dates of employment">
-                
-                <label for="responsibilities">Key Responsibilities:</label>
-                <textarea name="responsibilities" rows="4" placeholder="List your responsibilities"></textarea>
+        // Add more work experience
+        document.getElementById('add-work').addEventListener('click', function() {
+            const workSection = document.createElement('div');
+            workSection.classList.add('work-experience');
+            workSection.innerHTML = `
+                <label for="job-title">Job Title</label>
+                <input type="text" class="job-title" placeholder="Enter job title">
+                <label for="company">Company Name</label>
+                <input type="text" class="company" placeholder="Enter company name">
+                <label for="dates">Dates of Employment</label>
+                <input type="text" class="dates" placeholder="Enter employment dates">
+                <label for="responsibilities">Key Responsibilities</label>
+                <textarea class="responsibilities" rows="3" placeholder="Enter your key responsibilities"></textarea>
             `;
-            workExperienceSection.appendChild(newWorkExperience);
-        }
+            document.getElementById('work-experience-section').appendChild(workSection);
+        });
 
-        function addEducation() {
-            const educationSection = document.getElementById('education-section');
-            const newEducation = document.createElement('div');
-            newEducation.classList.add('education');
-            newEducation.innerHTML = `
-                <label for="degree">Degree/Qualification:</label>
-                <input type="text" name="degree" placeholder="Enter your degree or qualification">
-                
-                <label for="institution">Institution:</label>
-                <input type="text" name="institution" placeholder="Enter the name of the institution">
-                
-                <label for="graduation">Graduation Date:</label>
-                <input type="text" name="graduation" placeholder="Enter your graduation date">
+        // Add more education
+        document.getElementById('add-education').addEventListener('click', function() {
+            const educationSection = document.createElement('div');
+            educationSection.classList.add('education');
+            educationSection.innerHTML = `
+                <label for="degree">Degree/Qualification</label>
+                <input type="text" class="degree" placeholder="Enter your degree/qualification">
+                <label for="institution">Institution</label>
+                <input type="text" class="institution" placeholder="Enter institution name">
+                <label for="graduation">Graduation Date</label>
+                <input type="text" class="graduation" placeholder="Enter graduation date">
             `;
-            educationSection.appendChild(newEducation);
-        }
+            document.getElementById('education-section').appendChild(educationSection);
+        });
 
-        function generateCV() {
-            const name = document.getElementById('name').value;
-            const phone = document.getElementById('phone').value;
-            const email = document.getElementById('email').value;
-            const statement = document.getElementById('statement').value;
-            const skills = document.getElementById('skills').value;
-            
-            let workExperienceText = '';
-            document.querySelectorAll('.work-experience').forEach((workExp, index) => {
-                const jobTitle = workExp.querySelector('input[name="job-title"]').value;
-                const company = workExp.querySelector('input[name="company"]').value;
-                const dates = workExp.querySelector('input[name="dates"]').value;
-                const responsibilities = workExp.querySelector('textarea[name="responsibilities"]').value;
-                
-                workExperienceText += `
-                Job Title: ${jobTitle}\n
-                Company: ${company}\n
-                Dates: ${dates}\n
-                Responsibilities:\n${responsibilities}\n\n
-                `;
-            });
-
-            let educationText = '';
-            document.querySelectorAll('.education').forEach((edu, index) => {
-                const degree = edu.querySelector('input[name="degree"]').value;
-                const institution = edu.querySelector('input[name="institution"]').value;
-                const graduation = edu.querySelector('input[name="graduation"]').value;
-                
-                educationText += `
-                Degree: ${degree}\n
-                Institution: ${institution}\n
-                Graduation Date: ${graduation}\n\n
-                `;
-            });
-
-            const cvText = `
-            Name: ${name}\n
-            Phone: ${phone}\n
-            Email: ${email}\n\n
-            Personal Statement:\n${statement}\n\n
-            Skills:\n${skills}\n\n
-            Work Experience:\n${workExperienceText}\n
-            Education:\n${educationText}
-            `;
-
-            const blob = new Blob([cvText], { type: 'text/plain' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `${name}-CV.txt`;
-            link.click();
-        }
+        // Generate CV function
+        document.getElementById('generateCV').addEventListener('click', function() {
+            window.print(); // Opens print dialog to allow user to save as PDF
+        });
     </script>
-
 </body>
 </html>
