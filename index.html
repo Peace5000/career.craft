@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Craft - CV Creation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            text-align: center;
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        form {
+            background-color: white;
+            margin: 30px auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 50%;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"], input[type="email"], textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #e7f3e7;
+            border-radius: 10px;
+            width: 50%;
+            text-align: center;
+        }
+        .result img {
+            width: 100px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Career Craft - CV Creation</h1>
+</header>
+
+<form id="cvForm">
+    <h2>Enter Your Details</h2>
+    <label for="name">Full Name:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="modules">List Your Science Modules (comma-separated):</label>
+    <textarea id="modules" name="modules" rows="5" required></textarea>
+
+    <label for="level">Education Level:</label>
+    <select id="level" name="level" required>
+        <option value="undergraduate">Undergraduate</option>
+        <option value="postgraduate">Postgraduate</option>
+        <option value="phd">PhD</option>
+    </select>
+
+    <input type="submit" value="Create CV">
+</form>
+
+<div class="result" id="result" style="display: none;">
+    <h2>Congratulations!</h2>
+    <p id="jobSuggestion"></p>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Emojione_1F603.svg" alt="Happy Sticker">
+    <p><strong>Wow, you're a genius!</strong></p>
+</div>
+
+<script>
+    document.getElementById('cvForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const name = document.getElementById('name').value;
+        const modules = document.getElementById('modules').value.split(',');
+        const level = document.getElementById('level').value;
+
+        let jobSuggestion = '';
+
+        if (level === 'undergraduate') {
+            jobSuggestion = 'You can apply for internships or entry-level roles in labs, research assistants, or data analysis.';
+        } else if (level === 'postgraduate') {
+            jobSuggestion = 'You are eligible for mid-level research positions, teaching roles, and advanced data analysis jobs.';
+        } else if (level === 'phd') {
+            jobSuggestion = 'With a PhD, you can aim for senior research positions, university professorship, and leadership roles in science organizations.';
+        }
+
+        document.getElementById('jobSuggestion').innerText = `Based on your modules (${modules.join(', ')}) and your education level (${level}), ${jobSuggestion}`;
+
+        document.getElementById('result').style.display = 'block';
+    });
+</script>
+
+</body>
+</html>
