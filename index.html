@@ -4,26 +4,99 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Drawing Request Form</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+            display: block;
+            margin: 20px auto;
+        }
+    </style>
 </head>
 <body>
     <h1>Welcome to the Drawing Request Page!</h1>
     <p>Please select what you'd like me to draw for you:</p>
 
-    <form action="submit_request.php" method="POST">
+    <form id="drawingForm">
         <label for="drawing">Choose a drawing:</label>
         <select id="drawing" name="drawing">
             <option value="cat">Cat</option>
             <option value="dog">Dog</option>
             <option value="tree">Tree</option>
-            <option value="custom">Custom Request</option>
         </select>
         <br><br>
 
-        <label for="description">Description of what you want (optional):</label>
-        <input type="text" id="description" name="description">
-        <br><br>
-
-        <input type="submit" value="Submit">
+        <input type="submit" value="Draw">
     </form>
-</body>
-</html>
+
+    <canvas id="canvas" width="400" height="400"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        document.getElementById('drawingForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const drawing = document.getElementById('drawing').value;
+            draw(drawing);
+        });
+
+        function draw(type) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+
+            if (type === 'cat') {
+                drawCat();
+            } else if (type === 'dog') {
+                drawDog();
+            } else if (type === 'tree') {
+                drawTree();
+            }
+        }
+
+        function drawCat() {
+            ctx.fillStyle = 'orange';
+            ctx.beginPath();
+            ctx.arc(200, 200, 100, 0, Math.PI * 2); // Head
+            ctx.fill();
+
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(160, 180, 20, 0, Math.PI * 2); // Left eye
+            ctx.arc(240, 180, 20, 0, Math.PI * 2); // Right eye
+            ctx.fill();
+
+            ctx.fillStyle = 'black';
+            ctx.beginPath();
+            ctx.arc(160, 180, 10, 0, Math.PI * 2); // Left pupil
+            ctx.arc(240, 180, 10, 0, Math.PI * 2); // Right pupil
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(200, 220); // Nose
+            ctx.lineTo(190, 250);
+            ctx.lineTo(210, 250);
+            ctx.closePath();
+            ctx.fillStyle = 'pink';
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(200, 270, 20, 0, Math.PI, false); // Mouth
+            ctx.stroke();
+        }
+
+        function drawDog() {
+            // You can add dog drawing logic here
+            ctx.fillStyle = 'brown';
+            ctx.fillRect(100, 100, 200, 200); // Simple square for the dog
+        }
+
+        function drawTree() {
+            // Simple tree drawing logic
+            ctx.fillStyle = 'green';
+            ctx.beginPath();
+            ctx.moveTo(200, 50);
+            ctx.lineTo(250, 150);
+            ctx.lineTo(150, 150);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.fillStyle = 'brown';
