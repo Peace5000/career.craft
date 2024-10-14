@@ -1,41 +1,44 @@
 ---
 layout: default
-title: CV Creation Page
+title: Welcome to My CV Creation Page
 ---
 
-<h1>Welcome to the CV Creation Page!</h1>
+<h1>Welcome!</h1>
 <p>Please enter your details below:</p>
 
 <form id="cvForm">
     <label for="name">Name:</label>
-    <input type="text" id="name" required><br><br>
-
-    <label for="email">Email:</label>
-    <input type="email" id="email" required><br><br>
+    <input type="text" id="name" name="name" required><br><br>
 
     <label for="modules">Science Modules:</label>
-    <input type="text" id="modules" placeholder="e.g., Physics, Chemistry" required><br><br>
+    <input type="text" id="modules" name="modules" required><br><br>
 
-    <input type="submit" value="Create CV">
+    <label for="skills">Skills:</label>
+    <input type="text" id="skills" name="skills" required><br><br>
+
+    <input type="submit" value="Submit">
 </form>
-
-<div id="cvOutput" style="margin-top: 20px;"></div>
 
 <script>
     document.getElementById('cvForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent form submission
-
+        event.preventDefault();
+        
         const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
         const modules = document.getElementById('modules').value;
+        const skills = document.getElementById('skills').value;
 
-        const output = `
-            <h2>Your CV</h2>
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Science Modules:</strong> ${modules}</p>
-            <p>Congratulations! You're a genius! 🎉</p>
-        `;
-        document.getElementById('cvOutput').innerHTML = output;
+        // Create the CV page dynamically
+        const cvContent = `<h1>${name}'s CV</h1>
+        <h2>Science Modules</h2>
+        <p>${modules}</p>
+        <h2>Skills</h2>
+        <p>${skills}</p>
+        <h2>Congratulations!</h2>
+        <p>Wow, you're a genius! 🎉</p>`;
+
+        // Create a new HTML page and write the content
+        const newWindow = window.open();
+        newWindow.document.write(cvContent);
+        newWindow.document.close();
     });
 </script>
