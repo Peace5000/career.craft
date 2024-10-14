@@ -3,120 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Career Craft - CV Creation</title>
+    <title>CV Creation Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
-            padding: 0;
-        }
-        header {
-            text-align: center;
-            background-color: #4CAF50;
-            color: white;
             padding: 20px;
-        }
-        h1, h2 {
-            color: #333;
+            text-align: center;
         }
         form {
             background-color: white;
-            margin: 30px auto;
             padding: 20px;
             border-radius: 10px;
-            width: 50%;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
         }
-        input[type="text"], input[type="email"], textarea, select {
+        input, select, textarea {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
-            border: 1px solid #ccc;
             border-radius: 5px;
+            border: 1px solid #ccc;
         }
         input[type="submit"] {
             background-color: #4CAF50;
             color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
             cursor: pointer;
         }
         input[type="submit"]:hover {
             background-color: #45a049;
         }
-        .result {
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #e7f3e7;
-            border-radius: 10px;
-            width: 50%;
-            text-align: center;
-        }
-        .result img {
-            width: 100px;
-            margin-top: 10px;
-        }
     </style>
 </head>
 <body>
+    <h1>CV Creation Page</h1>
+    <form id="cvForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
 
-<header>
-    <h1>Career Craft - CV Creation</h1>
-</header>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
 
-<form id="cvForm">
-    <h2>Enter Your Details</h2>
-    <label for="name">Full Name:</label>
-    <input type="text" id="name" name="name" required>
+        <label for="modules">Modules (comma-separated):</label>
+        <textarea id="modules" name="modules" rows="4" required></textarea>
 
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required>
+        <label for="level">Education Level:</label>
+        <select id="level" name="level" required>
+            <option value="Undergraduate">Undergraduate</option>
+            <option value="Graduate">Graduate</option>
+            <option value="Postgraduate">Postgraduate</option>
+        </select>
 
-    <label for="modules">List Your Science Modules (comma-separated):</label>
-    <textarea id="modules" name="modules" rows="5" required></textarea>
+        <input type="submit" value="Generate CV">
+    </form>
 
-    <label for="level">Education Level:</label>
-    <select id="level" name="level" required>
-        <option value="undergraduate">Undergraduate</option>
-        <option value="postgraduate">Postgraduate</option>
-        <option value="phd">PhD</option>
-    </select>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+    <script>
+        document.getElementById('cvForm').addEventListener('submit', function(event) {
+            event.preventDefault();
 
-    <input type="submit" value="Create CV">
-</form>
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const modules = document.getElementById('modules').value.split(',');
+            const level = document.getElementById('level').value;
 
-<div class="result" id="result" style="display: none;">
-    <h2>Congratulations!</h2>
-    <p id="jobSuggestion"></p>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Emojione_1F603.svg" alt="Happy Sticker">
-    <p><strong>Wow, you're a genius!</strong></p>
-</div>
+            // Create PDF
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
 
-<script>
-    document.getElementById('cvForm').addEventListener('submit', function(event) {
-        event.preventDefault();
+            doc.text(20, 20, `Name: ${name}`);
+            doc.text(20, 30, `Email: ${email}`);
+            doc.text(20, 40, `Modules: ${modules.join(', ')}`);
+            doc.text(20, 50, `Education Level: ${level}`);
+            doc.text(20, 60, `Job Suggestions: Based on your modules, you could work as a Data Analyst, Scientist, or Engineer.`);
 
-        const name = document.getElementById('name').value;
-        const modules = document.getElementById('modules').value.split(',');
-        const level = document.getElementById('level').value;
-
-        let jobSuggestion = '';
-
-        if (level === 'undergraduate') {
-            jobSuggestion = 'You can apply for internships or entry-level roles in labs, research assistants, or data analysis.';
-        } else if (level === 'postgraduate') {
-            jobSuggestion = 'You are eligible for mid-level research positions, teaching roles, and advanced data analysis jobs.';
-        } else if (level === 'phd') {
-            jobSuggestion = 'With a PhD, you can aim for senior research positions, university professorship, and leadership roles in science organizations.';
-        }
-
-        document.getElementById('jobSuggestion').innerText = `Based on your modules (${modules.join(', ')}) and your education level (${level}), ${jobSuggestion}`;
-
-        document.getElementById('result').style.display = 'block';
-    });
-</script>
-
+            // Save the PDF
+            doc.save(`${name}_CV.pdf`);
+        });
+    </script>
 </body>
 </html>
+
+
+
+
+
