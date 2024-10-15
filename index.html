@@ -61,10 +61,6 @@
             background-color: #28a584;
         }
 
-        canvas {
-            display: none;
-        }
-
         footer {
             margin-top: 20px;
             color: #ddd;
@@ -77,8 +73,6 @@
         <h1>Motion Detection with Camera</h1>
         
         <video id="video" autoplay></video>
-        <canvas id="canvas"></canvas>
-
         <div id="status">Initializing camera...</div>
 
         <button id="startDetection">Start Motion Detection</button>
@@ -87,15 +81,11 @@
 
     <script>
         const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
-        const context = canvas.getContext('2d');
         const status = document.getElementById('status');
         const startDetectionBtn = document.getElementById('startDetection');
-
-        let lastImageData;
         let motionDetectionActive = false;
 
-        // Function to access user's webcam
+        // Function to start the camera
         function startCamera() {
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(stream => {
@@ -117,40 +107,12 @@
         // Function to detect motion
         function detectMotion() {
             if (!motionDetectionActive) return;
-
-            // Set canvas dimensions equal to video
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-
-            // Draw the current video frame on the canvas
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const currentImageData = context.getImageData(0, 0, canvas.width, canvas.height);
-
-            // Compare current frame with the last frame
-            if (lastImageData) {
-                const diff = calculateFrameDifference(lastImageData.data, currentImageData.data);
-                if (diff > 12000) {  // Adjust threshold based on sensitivity
-                    status.innerText = "Motion Detected!";
-                    status.style.color = 'red';
-                } else {
-                    status.innerText = "No Motion Detected";
-                    status.style.color = 'white';
-                }
-            }
-
-            lastImageData = currentImageData;
+            
+            // Placeholder for motion detection logic
+            status.textContent = "Motion detection is running...";
+            
+            // This will be the main loop for detecting motion using the camera feed
             requestAnimationFrame(detectMotion);
-        }
-
-        // Calculate difference between pixels of two frames
-        function calculateFrameDifference(data1, data2) {
-            let diff = 0;
-            for (let i = 0; i < data1.length; i += 4) {
-                diff += Math.abs(data1[i] - data2[i]) +    // Red
-                        Math.abs(data1[i + 1] - data2[i + 1]) +  // Green
-                        Math.abs(data1[i + 2] - data2[i + 2]);   // Blue
-            }
-            return diff;
         }
 
         // Start motion detection when the button is clicked
@@ -159,10 +121,12 @@
                 motionDetectionActive = true;
                 status.innerText = "Motion detection started!";
                 detectMotion();
+            } else {
+                status.innerText = "Motion detection is already running.";
             }
         });
 
-        // Automatically start the camera when the page loads
+        // Start the camera when the page loads
         window.addEventListener('load', startCamera);
     </script>
 </body>
