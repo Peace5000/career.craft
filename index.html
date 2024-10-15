@@ -3,180 +3,475 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CV Creation Platform</title>
+    <title>Motion Detector</title>
     <style>
+        /* General styling */
         body {
-            font-family: Arial, sans-serif;
-            background-color: skyblue;
-            color: black;
-            padding: 20px;
-            max-width: 900px;
-            margin: auto;
-        }
-
-        h1 {
-            color: purple;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(to right, #8360c3, #2ebf91);
+            font-family: 'Arial', sans-serif;
+            color: white;
             text-align: center;
         }
 
-        .section {
-            background-color: white;
-            padding: 15px;
-            border-radius: 10px;
+        h1 {
             margin-bottom: 20px;
         }
 
-        label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
+        /* Styling for the camera and buttons */
+        .container {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
 
-        input, textarea, select {
+        video {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            height: auto;
+            border-radius: 8px;
+            border: 2px solid #fff;
+        }
+
+        #status {
+            margin-top: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #fff;
         }
 
         button {
-            background-color: blue;
+            background-color: #2ebf91;
             color: white;
-            padding: 10px 20px;
             border: none;
-            border-radius: 5px;
+            padding: 10px 20px;
+            margin-top: 15px;
+            font-size: 1em;
+            border-radius: 8px;
             cursor: pointer;
+            transition: 0.3s;
         }
 
         button:hover {
-            background-color: darkblue;
+            background-color: #28a584;
         }
 
-        .add-more {
-            margin-bottom: 10px;
-            color: blue;
-            cursor: pointer;
+        canvas {
+            display: none;
         }
 
-        .add-more:hover {
-            text-decoration: underline;
+        footer {
+            margin-top: 20px;
+            color: #ddd;
+            font-size: 0.9em;
         }
     </style>
 </head>
 <body>
-    <h1>Create Your Professional CV</h1>
+    <div class="container">
+        <h1>Motion Detection with Camera</h1>
+        
+        <video id="video" autoplay></video>
+        <canvas id="canvas"></canvas>
 
-    <form id="cvForm">
-        <!-- Contact Information -->
-        <div class="section">
-            <h2>Contact Information</h2>
-            <label for="name">Full Name</label>
-            <input type="text" id="name" placeholder="Enter your full name">
+        <div id="status">Initializing camera...</div>
 
-            <label for="phone">Phone Number</label>
-            <input type="tel" id="phone" placeholder="Enter your phone number">
-
-            <label for="email">Email Address</label>
-            <input type="email" id="email" placeholder="Enter your email">
-        </div>
-
-        <!-- Personal Statement -->
-        <div class="section">
-            <h2>Personal Statement</h2>
-            <label for="statement">Brief Summary</label>
-            <textarea id="statement" rows="4" placeholder="Write a brief summary of your skills and career goals"></textarea>
-        </div>
-
-        <!-- Work Experience -->
-        <div class="section">
-            <h2>Work Experience</h2>
-            <div id="work-experience-section">
-                <div class="work-experience">
-                    <label for="job-title">Job Title</label>
-                    <input type="text" class="job-title" placeholder="Enter job title">
-
-                    <label for="company">Company Name</label>
-                    <input type="text" class="company" placeholder="Enter company name">
-
-                    <label for="dates">Dates of Employment</label>
-                    <input type="text" class="dates" placeholder="Enter employment dates">
-
-                    <label for="responsibilities">Key Responsibilities</label>
-                    <textarea class="responsibilities" rows="3" placeholder="Enter your key responsibilities"></textarea>
-                </div>
-            </div>
-            <span class="add-more" id="add-work">+ Add More Work Experience</span>
-        </div>
-
-        <!-- Education -->
-        <div class="section">
-            <h2>Education</h2>
-            <div id="education-section">
-                <div class="education">
-                    <label for="degree">Degree/Qualification</label>
-                    <input type="text" class="degree" placeholder="Enter your degree/qualification">
-
-                    <label for="institution">Institution</label>
-                    <input type="text" class="institution" placeholder="Enter institution name">
-
-                    <label for="graduation">Graduation Date</label>
-                    <input type="text" class="graduation" placeholder="Enter graduation date">
-                </div>
-            </div>
-            <span class="add-more" id="add-education">+ Add More Education</span>
-        </div>
-
-        <!-- Skills -->
-        <div class="section">
-            <h2>Skills</h2>
-            <label for="skills">List Your Skills</label>
-            <textarea id="skills" rows="4" placeholder="List your skills, separated by commas"></textarea>
-        </div>
-
-        <!-- Submit Button -->
-        <button type="button" id="generateCV">Generate CV</button>
-    </form>
+        <button id="startDetection">Start Motion Detection</button>
+        <footer>© 2024 Motion Sensor Web App</footer>
+    </div>
 
     <script>
-        // Add more work experience
-        document.getElementById('add-work').addEventListener('click', function() {
-            const workSection = document.createElement('div');
-            workSection.classList.add('work-experience');
-            workSection.innerHTML = `
-                <label for="job-title">Job Title</label>
-                <input type="text" class="job-title" placeholder="Enter job title">
-                <label for="company">Company Name</label>
-                <input type="text" class="company" placeholder="Enter company name">
-                <label for="dates">Dates of Employment</label>
-                <input type="text" class="dates" placeholder="Enter employment dates">
-                <label for="responsibilities">Key Responsibilities</label>
-                <textarea class="responsibilities" rows="3" placeholder="Enter your key responsibilities"></textarea>
-            `;
-            document.getElementById('work-experience-section').appendChild(workSection);
-        });
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        const status = document.getElementById('status');
+        const startDetectionBtn = document.getElementById('startDetection');
 
-        // Add more education
-        document.getElementById('add-education').addEventListener('click', function() {
-            const educationSection = document.createElement('div');
-            educationSection.classList.add('education');6
-            educationSection.innerHTML = `
-                <label for="degree">Degree/Qualification</label>
-                <input type="text" class="degree" placeholder="Enter your degree/qualification">
-                <label for="institution">Institution</label>
-                <input type="text" class="institution" placeholder="Enter institution name">
-                <label for="graduation">Graduation Date</label>
-                <input type="text" class="graduation" placeholder="Enter graduation date">
-            `;
-            document.getElementById('education-section').appendChild(educationSection);
-        });
+        let lastImageData;
+        let motionDetectionActive = false;
 
-        // Generate CV function
-        document.getElementById('generateCV').addEventListener('click', function() {
-            window.print(); // Opens print dialog to allow user to save as PDF
+        // Function to access user's webcam
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+                video.play();
+                status.textContent = "Camera ready!";
+            })
+            .catch(err => {
+                console.error("Error accessing camera: ", err);
+                status.textContent = "Error accessing camera.";
+            });
+
+        // Function to detect motion
+        function detectMotion() {
+            if (!motionDetectionActive) return;
+
+            // Set canvas dimensions equal to video
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            // Draw the current video frame on the canvas
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const currentImageData = context.getImageData(0, 0, canvas.width, canvas.height);
+
+            // Compare current frame with the last frame
+            if (lastImageData) {
+                const diff = calculateFrameDifference(lastImageData.data, currentImageData.data);
+                if (diff > 12000) {  // Adjust threshold based on sensitivity
+                    status.innerText = "Motion Detected!";
+                    status.style.color = 'red';
+                } else {
+                    status.innerText = "No Motion Detected";
+                    status.style.color = 'white';
+                }
+            }
+
+            lastImageData = currentImageData;
+            requestAnimationFrame(detectMotion);
+        }
+
+        // Calculate difference between pixels of two frames
+        function calculateFrameDifference(data1, data2) {
+            let diff = 0;
+            for (let i = 0; i < data1.length; i += 4) {
+                diff += Math.abs(data1[i] - data2[i]) +    // Red
+                        Math.abs(data1[i + 1] - data2[i + 1]) +  // Green
+                        Math.abs(data1[i + 2] - data2[i + 2]);   // Blue
+            }
+            return diff;
+        }
+
+        // Start motion detection when the button is clicked
+        startDetectionBtn.addEventListener('click', () => {
+            if (!motionDetectionActive) {
+                motionDetectionActive = true;
+                status.innerText = "Motion detection started!";
+                detectMotion();
+            }
         });
     </script>
 </body>
 </html>
-<a href="motion.html">Try Motion Detection</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motion Detector</title>
+    <style>
+        /* General styling */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(to right, #8360c3, #2ebf91);
+            font-family: 'Arial', sans-serif;
+            color: white;
+            text-align: center;
+        }
 
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        /* Styling for the camera and buttons */
+        .container {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 2px solid #fff;
+        }
+
+        #status {
+            margin-top: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        button {
+            background-color: #2ebf91;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 15px;
+            font-size: 1em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #28a584;
+        }
+
+        canvas {
+            display: none;
+        }
+
+        footer {
+            margin-top: 20px;
+            color: #ddd;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Motion Detection with Camera</h1>
+        
+        <video id="video" autoplay></video>
+        <canvas id="canvas"></canvas>
+
+        <div id="status">Initializing camera...</div>
+
+        <button id="startDetection">Start Motion Detection</button>
+        <footer>© 2024 Motion Sensor Web App</footer>
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        const status = document.getElementById('status');
+        const startDetectionBtn = document.getElementById('startDetection');
+
+        let lastImageData;
+        let motionDetectionActive = false;
+
+        // Function to access user's webcam
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+                video.play();
+                status.textContent = "Camera ready!";
+            })
+            .catch(err => {
+                console.error("Error accessing camera: ", err);
+                status.textContent = "Error accessing camera.";
+            });
+
+        // Function to detect motion
+        function detectMotion() {
+            if (!motionDetectionActive) return;
+
+            // Set canvas dimensions equal to video
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            // Draw the current video frame on the canvas
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const currentImageData = context.getImageData(0, 0, canvas.width, canvas.height);
+
+            // Compare current frame with the last frame
+            if (lastImageData) {
+                const diff = calculateFrameDifference(lastImageData.data, currentImageData.data);
+                if (diff > 12000) {  // Adjust threshold based on sensitivity
+                    status.innerText = "Motion Detected!";
+                    status.style.color = 'red';
+                } else {
+                    status.innerText = "No Motion Detected";
+                    status.style.color = 'white';
+                }
+            }
+
+            lastImageData = currentImageData;
+            requestAnimationFrame(detectMotion);
+        }
+
+        // Calculate difference between pixels of two frames
+        function calculateFrameDifference(data1, data2) {
+            let diff = 0;
+            for (let i = 0; i < data1.length; i += 4) {
+                diff += Math.abs(data1[i] - data2[i]) +    // Red
+                        Math.abs(data1[i + 1] - data2[i + 1]) +  // Green
+                        Math.abs(data1[i + 2] - data2[i + 2]);   // Blue
+            }
+            return diff;
+        }
+
+        // Start motion detection when the button is clicked
+        startDetectionBtn.addEventListener('click', () => {
+            if (!motionDetectionActive) {
+                motionDetectionActive = true;
+                status.innerText = "Motion detection started!";
+                detectMotion();
+            }
+        });
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motion Detector</title>
+    <style>
+        /* General styling */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(to right, #8360c3, #2ebf91);
+            font-family: 'Arial', sans-serif;
+            color: white;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        /* Styling for the camera and buttons */
+        .container {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 2px solid #fff;
+        }
+
+        #status {
+            margin-top: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        button {
+            background-color: #2ebf91;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 15px;
+            font-size: 1em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #28a584;
+        }
+
+        canvas {
+            display: none;
+        }
+
+        footer {
+            margin-top: 20px;
+            color: #ddd;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Motion Detection with Camera</h1>
+        
+        <video id="video" autoplay></video>
+        <canvas id="canvas"></canvas>
+
+        <div id="status">Initializing camera...</div>
+
+        <button id="startDetection">Start Motion Detection</button>
+        <footer>© 2024 Motion Sensor Web App</footer>
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        const status = document.getElementById('status');
+        const startDetectionBtn = document.getElementById('startDetection');
+
+        let lastImageData;
+        let motionDetectionActive = false;
+
+        // Function to access user's webcam
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+                video.play();
+                status.textContent = "Camera ready!";
+            })
+            .catch(err => {
+                console.error("Error accessing camera: ", err);
+                status.textContent = "Error accessing camera.";
+            });
+
+        // Function to detect motion
+        function detectMotion() {
+            if (!motionDetectionActive) return;
+
+            // Set canvas dimensions equal to video
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            // Draw the current video frame on the canvas
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const currentImageData = context.getImageData(0, 0, canvas.width, canvas.height);
+
+            // Compare current frame with the last frame
+            if (lastImageData) {
+                const diff = calculateFrameDifference(lastImageData.data, currentImageData.data);
+                if (diff > 12000) {  // Adjust threshold based on sensitivity
+                    status.innerText = "Motion Detected!";
+                    status.style.color = 'red';
+                } else {
+                    status.innerText = "No Motion Detected";
+                    status.style.color = 'white';
+                }
+            }
+
+            lastImageData = currentImageData;
+            requestAnimationFrame(detectMotion);
+        }
+
+        // Calculate difference between pixels of two frames
+        function calculateFrameDifference(data1, data2) {
+            let diff = 0;
+            for (let i = 0; i < data1.length; i += 4) {
+                diff += Math.abs(data1[i] - data2[i]) +    // Red
+                        Math.abs(data1[i + 1] - data2[i + 1]) +  // Green
+                        Math.abs(data1[i + 2] - data2[i + 2]);   // Blue
+            }
+            return diff;
+        }
+
+        // Start motion detection when the button is clicked
+        startDetectionBtn.addEventListener('click', () => {
+            if (!motionDetectionActive) {
+                motionDetectionActive = true;
+                status.innerText = "Motion detection started!";
+                detectMotion();
+            }
+        });
+    </script>
+</body>
+</html>
