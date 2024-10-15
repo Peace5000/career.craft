@@ -3,131 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Motion Detector</title>
+    <title>Creative Resume Builder</title>
     <style>
-        /* General styling */
         body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f4f9;
+            color: #333;
+        }
+
+        /* Main container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Navigation bar styling */
+        nav {
+            background-color: #2a2e43;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav ul {
+            list-style-type: none;
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(to right, #8360c3, #2ebf91);
-            font-family: 'Arial', sans-serif;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
             color: white;
+            font-size: 1.2em;
+            padding: 5px 10px;
+            transition: background 0.3s;
+        }
+
+        nav ul li a:hover {
+            background-color: #4a5068;
+            border-radius: 4px;
+        }
+
+        /* Basic page styling */
+        .section {
+            padding: 60px 20px;
             text-align: center;
         }
 
+        .hero {
+            background-color: #2a2e43;
+            color: white;
+            padding: 100px 20px;
+        }
+
         h1 {
+            font-size: 3em;
             margin-bottom: 20px;
         }
 
-        /* Styling for the camera and buttons */
-        .container {
-            background-color: rgba(0, 0, 0, 0.5);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-
-        video {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            border: 2px solid #fff;
-        }
-
-        #status {
-            margin-top: 15px;
+        p {
             font-size: 1.2em;
-            font-weight: bold;
-            color: #fff;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            h1 {
+                font-size: 2.2em;
+            }
+        }
+
+        /* Button styles */
         button {
+            padding: 10px 20px;
+            border: none;
             background-color: #2ebf91;
             color: white;
-            border: none;
-            padding: 10px 20px;
-            margin-top: 15px;
             font-size: 1em;
-            border-radius: 8px;
             cursor: pointer;
-            transition: 0.3s;
+            border-radius: 4px;
+            transition: background 0.3s;
         }
 
         button:hover {
             background-color: #28a584;
         }
 
-        footer {
+        /* Custom drawing area */
+        #canvas {
+            border: 2px solid #ccc;
             margin-top: 20px;
-            color: #ddd;
-            font-size: 0.9em;
+            width: 100%;
+            max-width: 400px;
+            height: 400px;
+            background-color: #fff;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Motion Detection with Camera</h1>
-        
-        <video id="video" autoplay></video>
-        <div id="status">Initializing camera...</div>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">
+            <h2>Creative CV</h2>
+        </div>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#resume">Resume Builder</a></li>
+            <li><a href="#draw">Creative Drawing</a></li>
+        </ul>
+    </nav>
 
-        <button id="startDetection">Start Motion Detection</button>
-        <footer>© 2024 Motion Sensor Web App</footer>
-    </div>
+    <!-- Hero Section for Home -->
+    <section id="home" class="hero section">
+        <h1>Welcome to the Creative Resume Builder</h1>
+        <p>Build your professional resume or unleash your creativity with custom drawings. All in one place.</p>
+        <button onclick="window.location.href='#resume'">Get Started</button>
+    </section>
+
+    <!-- Resume Builder Section -->
+    <section id="resume" class="section">
+        <h1>Build Your Resume</h1>
+        <p>Start crafting your professional resume with our easy-to-use builder. Answer questions, format automatically.</p>
+        <button onclick="window.location.href='#resumeBuilder'">Start Building</button>
+    </section>
+
+    <!-- Drawing Page Section -->
+    <section id="draw" class="section">
+        <h1>Creative Drawing Page</h1>
+        <p>Unleash your creativity! Draw shapes, colors, and images right here.</p>
+        <canvas id="canvas"></canvas>
+        <br>
+        <button onclick="clearCanvas()">Clear Canvas</button>
+    </section>
 
     <script>
-        const video = document.getElementById('video');
-        const status = document.getElementById('status');
-        const startDetectionBtn = document.getElementById('startDetection');
-        let motionDetectionActive = false;
+        // Simple Drawing on Canvas
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let drawing = false;
 
-        // Function to start the camera
-        function startCamera() {
-            navigator.mediaDevices.getUserMedia({ video: true })
-                .then(stream => {
-                    video.srcObject = stream;
-                    video.play();
-                    status.textContent = "Camera ready!";
-                })
-                .catch(err => {
-                    if (err.name === 'NotAllowedError') {
-                        status.textContent = "Camera permission denied. Please allow camera access.";
-                    } else if (err.name === 'NotFoundError') {
-                        status.textContent = "No camera found on this device.";
-                    } else {
-                        status.textContent = "Error accessing camera: " + err.message;
-                    }
-                });
+        function startPosition(e) {
+            drawing = true;
+            draw(e);
         }
 
-        // Function to detect motion
-        function detectMotion() {
-            if (!motionDetectionActive) return;
-            
-            // Placeholder for motion detection logic
-            status.textContent = "Motion detection is running...";
-            
-            // This will be the main loop for detecting motion using the camera feed
-            requestAnimationFrame(detectMotion);
+        function endPosition() {
+            drawing = false;
+            ctx.beginPath();  // Reset path
         }
 
-        // Start motion detection when the button is clicked
-        startDetectionBtn.addEventListener('click', () => {
-            if (!motionDetectionActive) {
-                motionDetectionActive = true;
-                status.innerText = "Motion detection started!";
-                detectMotion();
-            } else {
-                status.innerText = "Motion detection is already running.";
-            }
-        });
+        function draw(e) {
+            if (!drawing) return;
 
-        // Start the camera when the page loads
-        window.addEventListener('load', startCamera);
+            ctx.lineWidth = 5;
+            ctx.lineCap = "round";
+            ctx.strokeStyle = "#2ebf91";
+
+            // Get the position of the cursor on the canvas
+            ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // Event listeners for drawing on the canvas
+        canvas.addEventListener('mousedown', startPosition);
+        canvas.addEventListener('mouseup', endPosition);
+        canvas.addEventListener('mousemove', draw);
     </script>
 </body>
 </html>
