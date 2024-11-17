@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Creation Platform</title>
+</head>
+<body>
+    <h1>Create Your CV</h1>
+    <form method="POST" action="/">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="phone">Phone:</label><br>
+        <input type="tel" id="phone" name="phone" required><br><br>
+
+        <label for="education">Education:</label><br>
+        <textarea id="education" name="education" rows="4" required></textarea><br><br>
+
+        <label for="skills">Skills:</label><br>
+        <textarea id="skills" name="skills" rows="4" required></textarea><br><br>
+
+        <label for="experience">Experience:</label><br>
+        <textarea id="experience" name="experience" rows="4" required></textarea><br><br>
+
+        <button type="submit">Generate CV</button>
+    </form>
+</body>
+</html>
